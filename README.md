@@ -1,0 +1,1 @@
+# Kotlin_Appium_Gradle_Allure
