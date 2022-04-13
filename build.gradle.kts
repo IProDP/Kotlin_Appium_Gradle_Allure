@@ -1,9 +1,10 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.contracts.model.structure.UNKNOWN_COMPUTATION.type
 
 plugins {
     java
-    kotlin("jvm") version "1.4.0"
     application
+    kotlin("jvm") version "1.4.0"
+    kotlin("plugin.spring") version "1.4.0"
 }
 
 java {
@@ -12,7 +13,7 @@ java {
 }
 
 apply(plugin = "java")
-//apply(plugin = "kotlin-allopen")
+
 
 group = "me.prots"
 version = "1.0-SNAPSHOT"
@@ -20,11 +21,13 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+        url = uri ("https://oss.sonatype.org/content/repositories/snapshots/")
+    }
 }
 
 dependencies {
     //kotlin-tests
-    testImplementation(kotlin("test"))
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.4.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.4.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test-js:1.4.0")
@@ -34,10 +37,25 @@ dependencies {
     implementation("io.cucumber:cucumber-junit:6.11.0")
     implementation("io.cucumber:cucumber-jvm:6.11.0")
     implementation("io.cucumber:cucumber-java8:6.11.0")
-    //implementation("io.cucumber.kotlin:6.11.0")
 
+    implementation("net.masterthought:cucumber-reporting:5.7.0")
+
+    //junit
     implementation("org.junit.jupiter:junit-jupiter-api:5.8.0")
     implementation("org.testcontainers:junit-jupiter:1.16.0")
+    implementation("org.testifyproject.junit5:junit5:1.0.6")
+    //selenium
+    implementation("org.seleniumhq.selenium:selenium-java:3.141.59")
+    implementation("org.seleniumhq.selenium:selenium-server:3.141.59")
+    //appium
+    implementation("io.appium:java-client:7.5.1")
+    implementation("io.flux-capacitor:java-client:v0.1")
+    implementation("ly.count.sdk:java:20.11.0")
+    //gradle
+    implementation("com.ullink.gradle:gradle-nunit-plugin:1.13")
+    //reports
+    implementation("com.aventstack:extentreports:5.0.8")
+    compile ("com.google.guava:guava:29.0-jre")
 }
 
 tasks.test {
@@ -46,6 +64,7 @@ tasks.test {
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty("cucumber.junit-platform.naming-strategy", "long")
 }
 
 tasks.compileKotlin {
@@ -53,10 +72,6 @@ tasks.compileKotlin {
 }
 tasks.compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "16"
 }
 
 tasks.withType(JavaCompile::class) {
@@ -72,6 +87,7 @@ val cucumberRuntime: Configuration by configurations.creating {
 }
 
 //Mobile application
+
 arrayOf("Android", "IOS").forEach { platform ->
     arrayOf("AppOne_Device", "AppOne_Emulator", "AppTwo_Device", "AppTwo_Emulator").forEach { project ->
         arrayOf("@Smoke", "@Manual", "@Test").forEach { tags ->
@@ -81,35 +97,35 @@ arrayOf("Android", "IOS").forEach { platform ->
                     cucumberRuntime + sourceSets.main.get().output + sourceSets.main.get().output + sourceSets.test.get().output
 
                 when (project) {
-                    "AppOneMobile_Device" -> {
+                    "AppOne_Device" -> {
                         args = listOf(
                             "--plugin", "pretty",
                             "--plugin", "html:cucumber-report/target/cucumber-report.html",
-                            "--glue", "AppOne.FeatureSteps", "src/test/kotlin/AppOne/FeatureFiles",
+                            "--glue", "Mobile_UI.AppOneScreenInit.FeatureSteps", "src/test/kotlin/Mobile_UI/AppOneScreenInit/FeatureFiles",
                             "--tags", tags
                         )
                     }
-                    "AppOneMobile_Device_Emulator" -> {
+                    "AppOne_Emulator" -> {
                         args = listOf(
                             "--plugin", "pretty",
                             "--plugin", "html:cucumber-report/target/cucumber-report.html",
-                            "--glue", "AppOne.FeatureSteps", "src/test/kotlin/AppOne/FeatureFiles",
+                            "--glue", "Mobile_UI.AppOneScreenInit.FeatureSteps", "src/test/kotlin/Mobile_UI/AppOneScreenInit/FeatureFiles",
                             "--tags", tags
                         )
                     }
-                    "AppTwoMobile_Device" -> {
+                    "AppTwo_Device" -> {
                         args = listOf(
                             "--plugin", "pretty",
                             "--plugin", "html:cucumber-report/target/cucumber-report.html",
-                            "--glue", "AppTwo.FeatureSteps", "src/test/kotlin/AppTwo/FeatureFiles",
+                            "--glue", "Mobile_UI.AppTwoPageFactory.FeatureSteps", "src/test/kotlin/Mobile_UI/AppTwoPageFactory/FeatureFiles",
                             "--tags", tags
                         )
                     }
-                    "AppTwoMobile_Emulator" -> {
+                    "AppTwo_Emulator" -> {
                         args = listOf(
                             "--plugin", "pretty",
                             "--plugin", "html:cucumber-report/target/cucumber-report.html",
-                            "--glue", "AppTwo.FeatureSteps", "src/test/kotlin/AppTwo/FeatureFiles",
+                            "--glue", "Mobile_UI.AppTwoPageFactory.FeatureSteps", "src/test/kotlin/Mobile_UI/AppTwoPageFactory/FeatureFiles",
                             "--tags", tags
                         )
                     }
@@ -121,7 +137,6 @@ arrayOf("Android", "IOS").forEach { platform ->
         }
     }
 }
-
 application {
     mainClass.set("MainKt")
 }
