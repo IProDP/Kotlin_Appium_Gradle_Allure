@@ -1,8 +1,19 @@
 import org.jetbrains.kotlin.contracts.model.structure.UNKNOWN_COMPUTATION.type
+buildscript {
+    repositories {
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
+        }
+    }
+    dependencies {
+        classpath("io.qameta.allure.gradle.allure:allure-plugin: 2.9.4")
+    }
+}
 
 plugins {
     java
     application
+    id("io.qameta.allure") version "2.9.4"
     kotlin("jvm") version "1.4.0"
     kotlin("plugin.spring") version "1.4.0"
 }
@@ -13,7 +24,11 @@ java {
 }
 
 apply(plugin = "java")
-
+apply(plugin = "io.qameta.allure")
+apply(plugin = "kotlin-allopen")
+allOpen {
+    annotation("com.bns.starter.steps.StepContainer")
+}
 
 group = "me.prots"
 version = "1.0-SNAPSHOT"
@@ -56,15 +71,20 @@ dependencies {
     //reports
     implementation("com.aventstack:extentreports:5.0.8")
     compile ("com.google.guava:guava:29.0-jre")
-}
-
-tasks.test {
-    useJUnit()
+    //allure reporter
+    implementation("io.qameta.allure:allure-java-commons:2.16.1")
+    implementation("io.qameta.allure:allure-attachments:2.16.1")
+    implementation("io.qameta.allure:allure-selenide:2.16.1")
 }
 
 tasks.test {
     useJUnitPlatform()
-    systemProperty("cucumber.junit-platform.naming-strategy", "long")
+    systemProperty ("allure.results.directory", "$projectDir/build/allure-results")
+    testLogging {
+        events ("PASSED", "FAILED", "SKIPPED", "STANDARD_OUT", "STANDARD_ERROR")
+    }
+    testLogging.showStandardStreams = true
+    dependsOn ("cleanTest")
 }
 
 tasks.compileKotlin {
@@ -82,6 +102,12 @@ tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
 
+allure {
+    val version = "2.9.4"
+    val autoconfigure = true
+    val aspectjweaver = true
+}
+
 val cucumberRuntime: Configuration by configurations.creating {
     extendsFrom(configurations.testImplementation.get())
 }
@@ -92,6 +118,7 @@ arrayOf("Android", "IOS").forEach { platform ->
     arrayOf("AppOne_Device", "AppOne_Emulator", "AppTwo_Device", "AppTwo_Emulator").forEach { project ->
         arrayOf("@Smoke", "@Manual", "@Test").forEach { tags ->
             tasks.register<JavaExec>("test$platform$project$tags") {
+                systemProperty("allure.results.directory", "$projectDir/build/allure-results")
                 mainClass.set("io.cucumber.core.cli.Main")
                 classpath =
                     cucumberRuntime + sourceSets.main.get().output + sourceSets.main.get().output + sourceSets.test.get().output
@@ -101,6 +128,7 @@ arrayOf("Android", "IOS").forEach { platform ->
                         args = listOf(
                             "--plugin", "pretty",
                             "--plugin", "html:cucumber-report/target/cucumber-report.html",
+                            "--plugin", "io.qameta.allure.cucumber6jvm.AllureCucumber6Jvm",
                             "--glue", "Mobile_UI.AppOneScreenInit.FeatureSteps", "src/test/kotlin/Mobile_UI/AppOneScreenInit/FeatureFiles",
                             "--tags", tags
                         )
@@ -109,6 +137,7 @@ arrayOf("Android", "IOS").forEach { platform ->
                         args = listOf(
                             "--plugin", "pretty",
                             "--plugin", "html:cucumber-report/target/cucumber-report.html",
+                            "--plugin", "io.qameta.allure.cucumber6jvm.AllureCucumber6Jvm",
                             "--glue", "Mobile_UI.AppOneScreenInit.FeatureSteps", "src/test/kotlin/Mobile_UI/AppOneScreenInit/FeatureFiles",
                             "--tags", tags
                         )
@@ -117,6 +146,7 @@ arrayOf("Android", "IOS").forEach { platform ->
                         args = listOf(
                             "--plugin", "pretty",
                             "--plugin", "html:cucumber-report/target/cucumber-report.html",
+                            "--plugin", "io.qameta.allure.cucumber6jvm.AllureCucumber6Jvm",
                             "--glue", "Mobile_UI.AppTwoPageFactory.FeatureSteps", "src/test/kotlin/Mobile_UI/AppTwoPageFactory/FeatureFiles",
                             "--tags", tags
                         )
@@ -125,6 +155,7 @@ arrayOf("Android", "IOS").forEach { platform ->
                         args = listOf(
                             "--plugin", "pretty",
                             "--plugin", "html:cucumber-report/target/cucumber-report.html",
+                            "--plugin", "io.qameta.allure.cucumber6jvm.AllureCucumber6Jvm",
                             "--glue", "Mobile_UI.AppTwoPageFactory.FeatureSteps", "src/test/kotlin/Mobile_UI/AppTwoPageFactory/FeatureFiles",
                             "--tags", tags
                         )
