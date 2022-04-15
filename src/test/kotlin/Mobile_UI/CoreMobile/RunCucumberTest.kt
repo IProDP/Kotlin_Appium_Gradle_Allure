@@ -1,4 +1,4 @@
-package Core
+package Mobile_UI.CoreMobile
 
 import io.cucumber.junit.CucumberOptions
 import io.cucumber.junit.Cucumber

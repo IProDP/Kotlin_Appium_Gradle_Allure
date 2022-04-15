@@ -1,6 +1,6 @@
-package Core
+package Mobile_UI.CoreMobile
 
-import Core.DriverHolder.Companion.driver
+import Mobile_UI.CoreMobile.DriverHolder.Companion.driver
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.TakesScreenshot
 import org.testcontainers.shaded.org.apache.commons.io.FileUtils

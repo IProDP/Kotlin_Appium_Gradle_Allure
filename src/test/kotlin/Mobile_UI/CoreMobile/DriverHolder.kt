@@ -1,8 +1,8 @@
-package Core
+package Mobile_UI.CoreMobile
 
-import Core.KeyPaths.Companion.pathToAppiumMainJs
-import Core.KeyPaths.Companion.pathToNodejs
-import Core.ProjectCapabilities.Companion.BaseCapabilities
+import Mobile_UI.CoreMobile.KeyPaths.Companion.pathToAppiumMainJs
+import Mobile_UI.CoreMobile.KeyPaths.Companion.pathToNodejs
+import Mobile_UI.CoreMobile.ProjectCapabilities.Companion.BaseCapabilities
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileElement
 import io.appium.java_client.android.AndroidDriver
@@ -34,9 +34,9 @@ abstract class DriverHolder {
             //System.getenv("ENVIRONMENT") ?: "none"
         }
 
-        var appiumService: AppiumDriverLocalService? = null
+        private var appiumService: AppiumDriverLocalService? = null
 
-        fun initAppiumService(ipAddress: String, port: Int) {
+        private fun initAppiumService(ipAddress: String, port: Int) {
 
             appiumService = AppiumDriverLocalService.buildService(
                 AppiumServiceBuilder()
@@ -51,13 +51,13 @@ abstract class DriverHolder {
                     .withIPAddress(ipAddress)
                     .usingPort(port)
             )
-            println("New Appium service: " + appiumService?.getUrl())
+            println("New Appium service: " + appiumService?.url)
 
             appiumService?.start()
         }
 
         private var caps: DesiredCapabilities? = BaseCapabilities(environment)
-        lateinit var webDriverURL: URL
+        private lateinit var webDriverURL: URL
 
         fun getDriver(ipAddress: String, port: Int): AppiumDriver<MobileElement> {
             do {
@@ -82,9 +82,9 @@ abstract class DriverHolder {
             webDriverURL = URL("http://$ipAddress:$port/wd/hub")
             caps = BaseCapabilities(environment)
 
-            when (environment) {
-                "Android" -> driver = AndroidDriver(webDriverURL, caps)
-                "IOS" -> driver = IOSDriver(webDriverURL, caps)
+            driver = when (environment) {
+                "Android" -> AndroidDriver(webDriverURL, caps)
+                "IOS" -> IOSDriver(webDriverURL, caps)
                 else -> throw Exception("There is no such Environment!")
             }
             return driver

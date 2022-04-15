@@ -1,12 +1,12 @@
-package Core
+package Mobile_UI.CoreMobile
 
-import Core.DriverHolder.Companion.driver
-import Core.DriverHolder.Companion.environment
-import Core.DriverHolder.Companion.project
-import Core.DriverHolder.Companion.tags
-import Core.ProjectCapabilities.Companion.deviceName
-import Core.ProjectCapabilities.Companion.platformVersion
-import Core.ProjectCapabilities.Companion.udid
+import Mobile_UI.CoreMobile.DriverHolder.Companion.driver
+import Mobile_UI.CoreMobile.DriverHolder.Companion.environment
+import Mobile_UI.CoreMobile.DriverHolder.Companion.project
+import Mobile_UI.CoreMobile.DriverHolder.Companion.tags
+import Mobile_UI.CoreMobile.ProjectCapabilities.Companion.deviceName
+import Mobile_UI.CoreMobile.ProjectCapabilities.Companion.platformVersion
+import Mobile_UI.CoreMobile.ProjectCapabilities.Companion.udid
 import com.google.common.collect.ImmutableMap
 import io.qameta.allure.Attachment
 import org.openqa.selenium.OutputType
@@ -77,13 +77,13 @@ abstract class AllureReport() {
                     .build(), System.getProperty("user.dir") + "/build/allure-results/"
             )
         }
-        @Attachment(value = "Page screenshot", type = "image/png", fileExtension = ".png")
+        @Attachment(value = "Screen screenshot", type = "image/png", fileExtension = ".png")
         fun saveScreenshot(): File? {
             val file = (driver as TakesScreenshot).getScreenshotAs(OutputType.FILE)
             return file
         }
 
-        @Attachment(value = "Page screenshot", type = "video/mp4", fileExtension = ".mp4")
+        @Attachment(value = "Video of test", type = "video/mp4", fileExtension = ".mp4")
         fun saveVideo(videoStream: ByteArray?): File {
             fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
                 val formatter = SimpleDateFormat(format, locale)
@@ -91,7 +91,7 @@ abstract class AllureReport() {
             }
             val dateInString = Calendar.getInstance().time.toString("yyyy.MM.dd-HH.mm.ss")
 
-            val path: Path = Paths.get(System.getProperty("user.dir") + "artifact/video/$dateInString.mp4")
+            val path: Path = Paths.get(System.getProperty("user.dir") + "/artifact/videos/$dateInString.mp4")
             return Files.write(path, videoStream).toFile()
         }
     }

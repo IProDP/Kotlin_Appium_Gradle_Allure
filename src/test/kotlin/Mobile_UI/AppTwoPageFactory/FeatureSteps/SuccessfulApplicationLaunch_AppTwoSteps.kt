@@ -1,21 +1,21 @@
 package Mobile_UI.AppTwoPageFactory.FeatureSteps
 
-import Core.DriverHolder.Companion.getDriver
-import Mobile_UI.AppTwoPageFactory.POM.Page
 import Mobile_UI.AppTwoPageFactory.POM.StartScreen_AppTwo
+import Mobile_UI.AppTwoPageFactory.ScreenInitilazer_AppTwo.startScreen_AppTwo
+import Mobile_UI.CoreMobile.DriverHolder.Companion.driver
+import Mobile_UI.CoreMobile.Helper
 import io.cucumber.java8.En
 import org.junit.Assert
-import org.junit.Test
 
 
 class SuccessfulApplicationLaunch_AppTwoSteps : En {
 
-    var page: Page = Page()
-    var startScreen_AppTwo: StartScreen_AppTwo = StartScreen_AppTwo()
+
     init {
 
         Given("First description {string} displayed on the main screen") {descriptionFirst: String ->
-            Core.Helper.setImplicityWaitDriver(10, startScreen_AppTwo.driver)
+            Helper.setImplicityWaitDriver(200, driver)
+            Assert.assertEquals(descriptionFirst, startScreen_AppTwo.isPhpFirstDescriptionVisible2().getAttribute("text"))
             Assert.assertTrue(startScreen_AppTwo.isPhpFirstDescriptionVisible())
             Assert.assertEquals(descriptionFirst,startScreen_AppTwo.textPhpFirstDescription())
         }

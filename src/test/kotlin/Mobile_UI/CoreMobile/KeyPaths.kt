@@ -1,7 +1,7 @@
-package Core
+package Mobile_UI.CoreMobile
 
-import Core.DriverHolder.Companion.environment
-import Core.DriverHolder.Companion.project
+import Mobile_UI.CoreMobile.DriverHolder.Companion.environment
+import Mobile_UI.CoreMobile.DriverHolder.Companion.project
 
 class KeyPaths {
         companion object {
