@@ -1,6 +1,6 @@
 package Mobile_UI.AppOneScreenInit.POM
 
-import Core.DriverHolder.Companion.driver
+import Mobile_UI.CoreMobile.DriverHolder.Companion.driver
 import io.appium.java_client.MobileElement
 import org.openqa.selenium.By
 

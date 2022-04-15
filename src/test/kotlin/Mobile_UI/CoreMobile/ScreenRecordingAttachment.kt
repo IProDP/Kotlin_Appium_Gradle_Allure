@@ -1,6 +1,6 @@
-package Core
+package Mobile_UI.CoreMobile
 
-import Core.DriverHolder.Companion.driver
+import Mobile_UI.CoreMobile.DriverHolder.Companion.driver
 import io.appium.java_client.MobileElement
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.ios.IOSDriver
@@ -9,20 +9,22 @@ import io.qameta.allure.Attachment
 import org.openqa.selenium.WebDriverException
 import java.util.*
 
-interface ScreenRecording {
+interface ScreenRecordingAttachment {
 
-    @Attachment(value = "Page screenshot", type = "video/mp4", fileExtension = ".mp4")
+    @Attachment(value = "Video of test", type = "video/mp4", fileExtension = ".mp4")
     fun startRecording()
     fun stopRecording(): ByteArray?
 }
 
 
-abstract class BaseScreenRecording: ScreenRecording {
+abstract class BaseScreenRecordingAttachment: ScreenRecordingAttachment {
 
     protected fun ignoreWebDriverException(block: () -> Unit) {
         try {
             block()
-        } catch (e: WebDriverException) {}
+        } catch (e: WebDriverException) {
+            println("WebDriverException error during screenshot")
+        }
     }
 
     protected fun stopRecordingIgnoreWebDriverException(block: () -> ByteArray) : ByteArray? {
@@ -34,7 +36,7 @@ abstract class BaseScreenRecording: ScreenRecording {
     }
 }
 
-class ScreenRecording_Android: BaseScreenRecording() {
+class ScreenRecording_Attachment_Android: BaseScreenRecordingAttachment() {
 
     private val android: AndroidDriver<MobileElement> get() = driver as AndroidDriver<MobileElement>
 
@@ -53,7 +55,7 @@ class ScreenRecording_Android: BaseScreenRecording() {
         }
     }
 }
-class ScreenRecording_IOS: BaseScreenRecording() {
+class ScreenRecording_Attachment_IOS: BaseScreenRecordingAttachment() {
 
     private val iOS: IOSDriver<MobileElement> get() = driver as IOSDriver<MobileElement>
 

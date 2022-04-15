@@ -1,20 +1,20 @@
-package Mobile_UI.AppOneScreenInit
+package Mobile_UI.AppTwoPageFactory
 
-import Mobile_UI.AppOneScreenInit.POM.*
+import Mobile_UI.AppTwoPageFactory.POM.StartScreen_AppTwo
 import Mobile_UI.CoreMobile.*
 import Mobile_UI.CoreMobile.DriverHolder.Companion.environment
 
 
-object ScreenInitilazer_AppOne {
+object ScreenInitilazer_AppTwo {
 
     data class ScreenInit(
-        val startScreen_AppOne: StartScreen_AppOne,
+        val startScreen_AppTwo: StartScreen_AppTwo,
         val screenRecordingAttachment: ScreenRecordingAttachment,
         val screenshot: Screenshot
     )
 
-    val startScreen by lazy {
-        screens[environment]!!.startScreen_AppOne
+    val startScreen_AppTwo by lazy {
+        screens[environment]!!.startScreen_AppTwo
     }
     val screenRecording by lazy {
         screens[environment]!!.screenRecordingAttachment
@@ -25,12 +25,12 @@ object ScreenInitilazer_AppOne {
 
     private val screens = mapOf(
         "Android" to ScreenInit(
-            startScreen_AppOne = StartScreen_AppOne_Android(),
+            startScreen_AppTwo = StartScreen_AppTwo(),
             screenRecordingAttachment = ScreenRecording_Attachment_Android(),
             screenshot = Screenshot_Android()
         ),
         "IOS" to ScreenInit(
-            startScreen_AppOne = StartScreen_AppOne_IOS(),
+            startScreen_AppTwo = StartScreen_AppTwo(),
             screenRecordingAttachment = ScreenRecording_Attachment_IOS(),
             screenshot = Screenshot_IOS()
 

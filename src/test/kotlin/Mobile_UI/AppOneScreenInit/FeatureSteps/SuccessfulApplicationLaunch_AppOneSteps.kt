@@ -1,8 +1,7 @@
 package Mobile_UI.AppOneScreenInit.FeatureSteps
 
-import Core.AllureReport
-import Core.AllureReport.Companion.saveScreenshot
-import Core.Helper.Companion.setImplicityWait
+import Mobile_UI.CoreMobile.AllureReport.Companion.saveScreenshot
+import Mobile_UI.CoreMobile.Helper.Companion.setImplicityWait
 import Mobile_UI.AppOneScreenInit.ScreenInitilazer_AppOne.startScreen
 import io.cucumber.java8.En
 import io.qameta.allure.Allure

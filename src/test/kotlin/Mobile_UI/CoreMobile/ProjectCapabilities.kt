@@ -1,9 +1,8 @@
-package Core
+package Mobile_UI.CoreMobile
 
-import Core.DriverHolder.Companion.project
+import Mobile_UI.CoreMobile.DriverHolder.Companion.project
 import org.openqa.selenium.remote.DesiredCapabilities
-import Core.KeyPaths.Companion.Path
-import io.appium.java_client.remote.MobileCapabilityType
+import Mobile_UI.CoreMobile.KeyPaths.Companion.Path
 
 
 class ProjectCapabilities {
@@ -31,7 +30,7 @@ class ProjectCapabilities {
                     platformName = environment
                     deviceName = "iPhone 12"
                     platformVersion = "15.2"
-                    udid = "simulator device udid"
+                    udid = "SimulatorDeviceUdid"
                     automationName = "XCUITest"
                 }
                 else -> throw Exception("There is no such Capabilities!")
@@ -52,7 +51,7 @@ class ProjectCapabilities {
                     caps.setCapability("autoGrantPermissions", "true")
                     //caps.setCapability("noReset", true)
                     //caps.setCapability("skipUnlock", "false")
-            } else if (environment == "IOS") {
+            } else {
                     caps.setCapability("app", Path())
                     caps.setCapability("platformName", platformName)
                     caps.setCapability("platformVersion", platformVersion)
@@ -79,7 +78,7 @@ class ProjectCapabilities {
                     caps.setCapability("autoGrantPermissions", true)
                     caps.setCapability("autoAcceptAlerts", true)
 
-                } else if (environment == "IOS") {
+                } else {
                     caps.setCapability("app", Path())
                     caps.setCapability("platformName", "IOS")
                     caps.setCapability("platformVersion", platformVersion)
@@ -104,7 +103,7 @@ class ProjectCapabilities {
                     caps.setCapability("autoGrantPermissions", "true")
                     //caps.setCapability("noReset", true)
                     //caps.setCapability("skipUnlock", "false")
-                } else if (environment == "IOS") {
+                } else {
                     caps.setCapability("app", Path())
                     caps.setCapability("platformName", platformName)
                     caps.setCapability("platformVersion", platformVersion)
@@ -130,7 +129,7 @@ class ProjectCapabilities {
                     caps.setCapability("appActivity", ".MainActivity")
                     caps.setCapability("autoGrantPermissions", true)
                     caps.setCapability("autoAcceptAlerts", true)
-                } else if (environment == "IOS") {
+                } else {
                     caps.setCapability("app", Path())
                     caps.setCapability("platformName", "IOS")
                     caps.setCapability("platformVersion", platformVersion)

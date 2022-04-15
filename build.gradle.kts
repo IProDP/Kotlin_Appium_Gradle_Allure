@@ -52,9 +52,7 @@ dependencies {
     implementation("io.cucumber:cucumber-junit:6.11.0")
     implementation("io.cucumber:cucumber-jvm:6.11.0")
     implementation("io.cucumber:cucumber-java8:6.11.0")
-
     implementation("net.masterthought:cucumber-reporting:5.7.0")
-
     //junit
     implementation("org.junit.jupiter:junit-jupiter-api:5.8.0")
     implementation("org.testcontainers:junit-jupiter:1.16.0")
@@ -75,6 +73,9 @@ dependencies {
     implementation("io.qameta.allure:allure-java-commons:2.16.1")
     implementation("io.qameta.allure:allure-attachments:2.16.1")
     implementation("io.qameta.allure:allure-selenide:2.16.1")
+    //selenium
+    implementation("org.seleniumhq.selenium:selenium-java:3.141.59")
+    implementation("org.seleniumhq.selenium:selenium-server:3.141.59")
 }
 
 tasks.test {
@@ -168,6 +169,37 @@ arrayOf("Android", "IOS").forEach { platform ->
         }
     }
 }
+
+//Web Application
+
+arrayOf("Chrome", "Edge").forEach { browser ->
+    arrayOf("AppOneWeb").forEach { projectWeb ->
+        arrayOf("@Smoke", "@Manual", "@Test").forEach { tagsWeb ->
+            tasks.register<JavaExec>("testWeb$browser$projectWeb$tagsWeb") {
+                systemProperty("allure.results.directory", "$projectDir/build/allure-results")
+                mainClass.set("io.cucumber.core.cli.Main")
+                classpath =
+                    cucumberRuntime + sourceSets.main.get().output + sourceSets.main.get().output + sourceSets.test.get().output
+
+                when (projectWeb) {
+                    "AppOneWeb" -> {
+                        args = listOf(
+                            "--plugin", "pretty",
+                            "--plugin", "html:cucumber-report/target/cucumber-report.html",
+                            "--plugin", "io.qameta.allure.cucumber6jvm.AllureCucumber6Jvm",
+                            "--glue", "Web_UI.AppOneWeb.FeatureSteps", "src/test/kotlin/Web_UI/AppOneWeb/FeatureFiles",
+                            "--tags", tagsWeb
+                        )
+                    }
+                }
+                systemProperty("browser", browser)
+                systemProperty("projectWeb", projectWeb)
+                systemProperty("tagsWeb", tagsWeb)
+            }
+        }
+    }
+}
+
 application {
     mainClass.set("MainKt")
 }
