@@ -10,10 +10,13 @@
 2. JUnit will be used to pass the implemented tests
 
 ##Mobile Application Testing
-1. For testing mobile applications, *.apk files for the Android operating system and *.app for the iOS operating system will be used.
+1. *.apk files for the Android operating system and *.app for the iOS operating system will be used for testing mobile applications.
 2. *.apk and *.app files can be delivered to the project thanks to CI/CD and moved to the resources/mobile_ui/ for apk or app folder
    1. *.app must be built in build mode "build for testing" with pre-selected simulator SDK and device version
    2. *.apk must be built with API support of the selected emulator model
 3. Testing does not depend on the language in which the application is implemented
-4. Emulator for Android and simulator for iOS are launched automatically by means of Appium "cappabilities"
+4. Emulator for Android and simulator for iOS are launched automatically by Appium "cappabilities"
 5. For the convenience of communication between testers and developers, it is recommended to work with the development team on Kotlin
+
+##Web Application Testing
+1. msedgedriver.exe and chromedriver.exe files was added for running tests on the  OS Windows x64.
